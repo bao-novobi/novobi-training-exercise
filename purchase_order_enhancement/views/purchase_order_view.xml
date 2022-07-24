@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-    
         <record id="view_purchase_order_enchancement_inherit_from_purchase_order" model="ir.ui.view">
             <field name="name">view.purchase.order.enchancement.inherit.from.purchase.order</field>
             <field name="model">purchase.order</field>
@@ -59,9 +58,5 @@
                 action = records.action_archive_record()
             </field>
         </record>
-
-
-
-
     </data>
 </odoo>
