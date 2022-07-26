@@ -24,13 +24,10 @@
                     <field name="active" invisible="1"/>
                 </xpath>
                 <xpath expr="//div[@name='button_box']" position="inside">
-                    <button type="object" name="toggle_active" string="Archive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', False), ('state', 'not in', ('done','cancel'))]}">
+                    <button type="object" name="action_archive_record" string="Archive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', False), ('state', 'not in', ('done','cancel'))]}">
                     </button>
-                    <button type="object" name="toggle_active" string="Unarchive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', True), ('state', 'not in', ('done','cancel'))]}">
+                    <button type="object" name="action_archive_record" string="Unarchive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', True), ('state', 'not in', ('done','cancel'))]}">
                     </button>
-                </xpath>
-                <xpath expr="//field[@name='fiscal_position_id']" position="after">
-                    <field name="lifespan"/>
                 </xpath>
             </field>
         </record>

@@ -7,22 +7,21 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     active = fields.Boolean(string="Active", default=True)
-    lifespan = fields.Integer(string="Lifespan (day)", default=300, copy=False)
 
-    def action_archive_record(self):
-        check_all = True
-        for record in self:
-            if record.state not in ['done', 'cancel']:
-                check_all = False
-        if check_all:
-            for record in self:
-                record.active = False
+    def action_archive_record(self, api_call=False):
+        if self.env.user.has_group('purchase.group_purchase_manager') or api_call:
+            check_state = self.filtered(lambda po: po.state not in ['done', 'cancel'])
+            if check_state:
+                raise UserError("Purchase orders state need to be locked or cancel in order to be archived.")
+            else:
+                self.write({'active': False})
         else:
-            raise UserError('Need to lock or cancel purchase order')
+            raise UserError('You do not have access to this function.')
 
     @api.model
-    def delete_old_po(self):
-        for po in self.search([("active", "=", True)]):
-            if datetime.today() >= po.write_date + timedelta(days=po.lifespan):
-                po.active = False
-                
+    def archive_old_po(self):
+        lifespan = int(self.env['ir.config_parameter'].sudo().get_param('purchase_order_enhancement.lifespan'))
+        time_check = datetime.today() - timedelta(days=lifespan)
+        old_pos = self.search([("write_date", "<=", time_check)])
+        old_pos = old_pos.filtered(lambda po: po.state in ['done', 'cancel'])
+        old_pos.write({"active": False})
