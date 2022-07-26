@@ -22,6 +22,6 @@ class PurchaseOrder(models.Model):
     def archive_old_po(self):
         lifespan = int(self.env['ir.config_parameter'].sudo().get_param('purchase_order_enhancement.lifespan'))
         time_check = datetime.today() - timedelta(days=lifespan)
-        old_pos = self.search([("write_date", "<=", time_check)])
-        old_pos = old_pos.filtered(lambda po: po.state in ['done', 'cancel'])
+        old_pos = self.search([("write_date", "<=", time_check), ("state", "in", ['done', 'cancel'])])
         old_pos.write({"active": False})
+        
