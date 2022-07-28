@@ -13,4 +13,9 @@
         'wizard/archive_purchase_orders_views.xml',
     ],
     'demo': [],
+    'assets': {
+        'web.assets_backend': [
+            'purchase_order_enhancement/static/src/js/us_phone.js',
+        ]
+    },
 }

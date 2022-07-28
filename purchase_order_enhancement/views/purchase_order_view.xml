@@ -7,7 +7,8 @@
             <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='origin']" position="after">
-                    <field name="active" optional="hide"/>
+                    <field name="active" invisible="1"/>
+                    <field name="us_phone" widget="us_phone_number"/>
                 </xpath>
                 <xpath expr="//tree" position="attributes">
                     <attribute name="decoration-muted">(not active) or (state=='cancel')</attribute>
@@ -26,7 +27,7 @@
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button type="object" name="action_archive_record" string="Archive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', False), ('state', 'not in', ('done','cancel'))]}">
                     </button>
-                    <button type="object" name="action_archive_record" string="Unarchive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', True), ('state', 'not in', ('done','cancel'))]}">
+                    <button type="object" name="action_unarchive_record" string="Unarchive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('active', '=', True)]}">
                     </button>
                 </xpath>
             </field>

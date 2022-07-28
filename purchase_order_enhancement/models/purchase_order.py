@@ -7,6 +7,7 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     active = fields.Boolean(string="Active", default=True)
+    us_phone = fields.Char(string="US phone")
 
     def action_archive_record(self, api_call=False):
         if self.env.user.has_group('purchase.group_purchase_manager') or api_call:
@@ -18,10 +19,15 @@ class PurchaseOrder(models.Model):
         else:
             raise UserError('You do not have access to this function.')
 
+    def action_unarchive_record(self):
+        if self.env.user.has_group('purchase.group_purchase_manager'):
+            self.write({'active': True})
+        else:
+            raise UserError('You do not have access to this function.')
+
     @api.model
     def archive_old_po(self):
         lifespan = int(self.env['ir.config_parameter'].sudo().get_param('purchase_order_enhancement.lifespan'))
         time_check = datetime.today() - timedelta(days=lifespan)
         old_pos = self.search([("write_date", "<=", time_check), ("state", "in", ['done', 'cancel'])])
         old_pos.write({"active": False})
-        
