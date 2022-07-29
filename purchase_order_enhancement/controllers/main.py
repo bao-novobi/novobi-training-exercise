@@ -9,33 +9,33 @@ class Main(http.Controller):
     def archive(self, **kwargs):
         try:
             data = json.loads(request.httprequest.data)
-            method = data['params']['method']
-            order_ids = data['params']['orders']
         except:
             body = {
                     "archived_orders": False,
                     "code": 400,
-                    "message": "Invalid request"
+                    "message": "Invalid Request"
             }
             return body
+        method = data.get('params').get('method')
+        order_ids = data.get('params').get('orders')
         if method != "archive":
             body = {
                     "archived_orders": False,
                     "code": 400,
-                    "message": "Invalid method"
+                    "message": "Invalid Method"
             }
         elif not isinstance(order_ids, list) or not all([isinstance(x, int) for x in order_ids]):
             body = {
                     "archived_orders": False,
                     "code": 400,
-                    "message": "Invalid order_id"
+                    "message": "Invalid Purchase Order Ids"
             }
         else:
             records = request.env['purchase.order'].sudo().browse(order_ids).exists()
             body = {
                 "archived_orders": False,
                 "code": 404,
-                "message": "Could not found"
+                "message": "Could not find the Purchase Order ids"
             }
             if len(records) == len(order_ids):
                 try:
