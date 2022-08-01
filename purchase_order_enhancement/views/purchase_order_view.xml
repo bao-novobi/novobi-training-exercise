@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_purchase_order_enchancement_inherit_from_purchase_order" model="ir.ui.view">
+            <field name="name">view.purchase.order.enchancement.inherit.from.purchase.order</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="active" invisible="1"/>
+                    <field name="us_phone" widget="us_phone_number"/>
+                </xpath>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-muted">(not active) or (state=='cancel')</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_enchancement_inherit_from_purchase_order_form" model="ir.ui.view">
+            <field name="name">view.purchase.order.enchancement.inherit.from.purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="active" invisible="1"/>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object" name="action_archive_record" string="Archive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('active', '=', False), ('state', 'not in', ('done','cancel'))]}">
+                    </button>
+                    <button type="object" name="action_unarchive_record" string="Unarchive" groups="purchase.group_purchase_manager" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('active', '=', True)]}">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_enchancement_inherit_from_purchase_order_filter" model="ir.ui.view">
+            <field name="name">view.purchase.order.enchancement.inherit.from.purchase.order.filter</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='draft']" position="after">
+                    <separator/>
+                    <filter name="filter_archive" string="Archived" domain="[('active', '=', False)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_archive_purchase_order" model="ir.actions.server">
+            <field name="name">Archive Purchase Order</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name='groups_id' eval="[(4, ref('purchase.group_purchase_manager'))]"/>
+            <field name="state">code</field>
+            <field name="code">
+            if records:
+                action = records.action_archive_record()
+            </field>
+        </record>
+    </data>
+</odoo>
