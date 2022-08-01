@@ -6,7 +6,7 @@
             <field name="model">archive.purchase.orders.wizard</field>
             <field name="arch" type="xml">
                 <form>
-                    <field name="purchase_order_id"/>
+                    <field name="purchase_order_ids"/>
                     <footer>
                         <button name="action_archive" type="object" string="Confirm" class="btn-primary"/>
                         <button special="cancel" string="Cancel" class="btn-secondary"/>

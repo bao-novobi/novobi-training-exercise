@@ -11,24 +11,24 @@ class Main(http.Controller):
             data = json.loads(request.httprequest.data)
         except:
             body = {
-                    "archived_orders": False,
-                    "code": 400,
-                    "message": "Invalid Request"
+                "archived_orders": False,
+                "code": 400,
+                "message": "Invalid Request"
             }
             return body
         method = data.get('params').get('method')
         order_ids = data.get('params').get('orders')
         if method != "archive":
             body = {
-                    "archived_orders": False,
-                    "code": 400,
-                    "message": "Invalid Method"
+                "archived_orders": False,
+                "code": 400,
+                "message": "Invalid Method"
             }
         elif not isinstance(order_ids, list) or not all([isinstance(x, int) for x in order_ids]):
             body = {
-                    "archived_orders": False,
-                    "code": 400,
-                    "message": "Invalid Purchase Order Ids"
+                "archived_orders": False,
+                "code": 400,
+                "message": "Invalid Purchase Order Ids"
             }
         else:
             records = request.env['purchase.order'].sudo().browse(order_ids).exists()
